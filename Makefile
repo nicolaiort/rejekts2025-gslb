@@ -84,6 +84,9 @@ curl-resolved:
 repeat:
 	@for i in {1..$(TIMES)}; do printf \-;printf " "; $(COMMAND); done
 
+infinity:
+	@while true; do printf \-;printf " "; $(COMMAND); done
+
 #region Kubernetes
 stop-service:
 	KUBECONFIG=$(KUBECONFIG$(CLUSTERID)) kubectl scale deployment echo-service --replicas=0
