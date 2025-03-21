@@ -70,7 +70,7 @@ dig:
 	@dig $(DOMAIN) +short
 
 curl-resolved:
-	@curl -s -k -H "Host: $(DOMAIN)" -H "Connection: close" https://$(shell dig $(DOMAIN) +short | head -1 ) && echo
+	@curl -s -k -H "Host: $(DOMAIN)" -H "Connection: close" https://$(shell dig $(DOMAIN) +short @18.198.114.75 | head -1 ) && echo
 
 repeat:
 	@for i in {1..$(TIMES)}; do printf \-;printf " "; $(COMMAND); done
