@@ -53,8 +53,14 @@ metadata:
   name: glsb-service
   labels:
     app: glsb-service
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
   ingressClassName: nginx
+  tls:
+  - hosts:
+    - demo.k8gb.nig.gl
+    secretName: glsb-service-tls
   rules:
     - host: demo.k8gb.nig.gl
       http:

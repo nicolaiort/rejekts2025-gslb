@@ -21,23 +21,23 @@ TODO:
 
 1. Clone this repository:
 
-```bash
-git clone git@github.com:nicolaiort/rejekts2025-glsb.git #via SSH
-# or
-git clone https://github.com/nicolaiort/rejekts2025-glsb.git #via HTTPS
-```
+   ```bash
+   git clone git@github.com:nicolaiort/rejekts2025-glsb.git #via SSH
+   # or
+   git clone https://github.com/nicolaiort/rejekts2025-glsb.git #via HTTPS
+   ```
 
 2. Change into the directory:
 
-```bash
-cd rejekts2025-glsb
-```
+   ```bash
+   cd rejekts2025-glsb
+   ```
 
-3. Get your kubeconfigs for the clusters you want to use and place them in the `.secrets` directory. The files should be named `cluster1-kubeconfig`, `cluster2-kubeconfig`, etc.
+3. Get your kubeconfigs for the clusters you want to use and place them in the `.secrets` directory.
+   The files should be named `cluster1-kubeconfig`, `cluster2-kubeconfig`, etc.
 
-### Clustermesh
+4. Install nginx and cert-manager into your clusters:
 
-TODO:
-
-### K8GB
-
+   ```bash
+   make setup
+   ```

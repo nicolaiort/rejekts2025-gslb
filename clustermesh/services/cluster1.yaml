@@ -1,25 +1,18 @@
-apiVersion: apps/v1
-kind: Deployment
+---
+apiVersion: v1
+kind: Service
 metadata:
+  labels:
+    app: meshed-service
   name: meshed-service
+  annotations:
+    io.cilium/global-service: "true"
+    io.cilium/service-affinity: "local"
 spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
   selector:
-    matchLabels:
-      app: meshed-service
-  replicas: 2
-  template:
-    metadata:
-      labels:
-        app: meshed-service
-    spec:
-      containers:
-      - name: test
-        image: ghcr.io/nicolaiort/kusatoko:latest
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 80
-        env:
-          - name: PORT
-            value: "80"
-          - name: ROOT_MESSAGE
-            value: "Hello from cluster-1"
+    app: meshed-service
