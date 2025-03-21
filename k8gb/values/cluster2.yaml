@@ -9,3 +9,5 @@ cloudflare:
   enabled: true
   zoneID: f060f7c7823de0e410ee01ba55a0e30a
   dnsRecordsPerPage: 5000
+coredns:
+  serviceType: LoadBalancer
