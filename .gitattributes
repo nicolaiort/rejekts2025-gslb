@@ -1,3 +1,4 @@
 .secrets/** filter=git-crypt diff=git-crypt  merge=git-crypt
 **/.secrets/** filter=git-crypt diff=git-crypt merge=git-crypt
+**.tmpl !filter !diff
 .gitattributes !filter !diff
