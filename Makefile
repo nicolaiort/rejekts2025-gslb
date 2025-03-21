@@ -12,7 +12,7 @@ setup:
 
 setup-baseline:
 	make setup-baseline-single CURRENT_KUBECONFIG=$(KUBECONFIG1)
-	# make setup-baseline-single CURRENT_KUBECONFIG=$(KUBECONFIG2)
+	make setup-baseline-single CURRENT_KUBECONFIG=$(KUBECONFIG2)
 	# make setup-baseline-single CURRENT_KUBECONFIG=$(KUBECONFIG3)
 
 setup-baseline-single:
@@ -23,7 +23,7 @@ setup-baseline-single:
 
 setup-echo:
 	KUBECONFIG=$(KUBECONFIG1) kubectl apply -f deployments/cluster1.yaml
-	# KUBECONFIG=$(KUBECONFIG2) kubectl apply -f deployments/cluster2.yaml
+	KUBECONFIG=$(KUBECONFIG2) kubectl apply -f deployments/cluster2.yaml
 	# KUBECONFIG=$(KUBECONFIG3) kubectl apply -f deployments/cluster3.yaml
 #endregion Setup
 
