@@ -4,7 +4,12 @@ Demo for the talk "Evaluating Global Load Balancing Options for Kubernetes in Pr
 
 ## Overview
 
-TODO:
+This repository contains two main demos:
+
+1. **k8gb**: A demo of the [k8gb](https://k8gb.io/) global load balancer
+  - Round Robin based load balancing across multiple clusters
+  - Failover based load balancing across multiple clusters with one primary cluster and multiple secondary clusters
+2. **clustermesh**: A demo of clustermesh based load balancing implemented with [cilium](https://cilium.io/)
 
 ## Try it for yourself
 
