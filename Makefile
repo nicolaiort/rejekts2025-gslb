@@ -1,6 +1,19 @@
 KUBECONFIG1 := .secrets/cluster1-kubeconfig
 KUBECONFIG2 := .secrets/cluster2-kubeconfig
 
+#region Setup
+
+setup:
+	make setup-cluster CURRENT_KUBECONFIG=$(KUBECONFIG1)
+
+setup-cluster:
+	KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl create namespace nginx --dry-run=client -o yaml | KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl apply -f -
+	KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl create namespace cert-manager --dry-run=client -o yaml | KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl apply -f -
+	KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl apply -f .secrets/cloudflaretoken.yaml
+	KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl apply -k baseline/
+
+#endregion Setup
+
 #region Cluster Mesh
 
 clustermesh-deployments:
@@ -31,10 +44,6 @@ clustermesh-remote:
 #region k8gb
 
 k8gb-setup:
-	@echo "Setting up nginx..."
-	KUBECONFIG=$(KUBECONFIG1) kubectl create namespace k8gb --dry-run=client -o yaml | KUBECONFIG=$(KUBECONFIG1) kubectl apply -f -
-	KUBECONFIG=$(KUBECONFIG1) kubectl create namespace nginx --dry-run=client -o yaml | KUBECONFIG=$(KUBECONFIG1) kubectl apply -f -
-	KUBECONFIG=$(KUBECONFIG1) kubectl apply -f k8gb/ingress/cluster1.yaml
 	@echo "Setting up k8gb..."
 	KUBECONFIG=$(KUBECONFIG1) kubectl create namespace k8gb --dry-run=client -o yaml | KUBECONFIG=$(KUBECONFIG1) kubectl apply -f -
 	KUBECONFIG=$(KUBECONFIG1) kubectl apply -f .secrets/cloudflaretoken.yaml
@@ -46,9 +55,7 @@ k8gb-deployments:
 	@echo "Deploying k8gb deployments..."
 	KUBECONFIG=$(KUBECONFIG1) kubectl apply -f k8gb/deployments/cluster1.yaml
 	@echo "Waiting for all pods to be ready..."
-	KUBECONFIG=$(KUBECONFIG1) kubectl wait --for=condition=available --timeout=600s deployment/meshed-service
-	@echo "All pods are ready!"
-	KUBECONFIG=$(KUBECONFIG1) kubectl apply -f k8gb/ingress/cluster1.yaml
+	KUBECONFIG=$(KUBECONFIG1) kubectl wait --for=condition=available --timeout=600s deployment/glsb-service
 	@echo "k8gb deployments complete."
 
 #endregion k8gb

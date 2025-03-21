@@ -13,5 +13,4 @@ coredns:
   serviceType: LoadBalancer
   service:
     annotations:
-      load-balancer.hetzner.cloud/location: "nbg1"
-      load-balancer.hetzner.cloud/protocol: "udp"
+      service.beta.kubernetes.io/aws-load-balancer-type: nlb

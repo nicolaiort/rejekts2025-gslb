@@ -6,3 +6,12 @@ metadata:
 type: Opaque
 stringData:
   token: <token>
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: letsencrypt-prod-dns-cloudflare-key
+  namespace: cert-manager
+type: Opaque
+stringData:
+  token: <token>
