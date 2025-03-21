@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: glsb-service
+spec:
+  selector:
+    matchLabels:
+      app: glsb-service
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: glsb-service
+    spec:
+      containers:
+      - name: test
+        image: ghcr.io/nicolaiort/kusatoko:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+          - name: PORT
+            value: "80"
+          - name: ROOT_MESSAGE
+            value: "Hello from cluster-1"
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: glsb-service
+  name: glsb-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: glsb-service
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: glsb-service
+  labels:
+    app: glsb-service
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: demo.k8gb.nig.gl
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: glsb-service
+              port:
+                number: 80
+---
+apiVersion: k8gb.absa.oss/v1beta1
+kind: Gslb
+metadata:
+  name: glsb-service
+spec:
+  resourceRef:
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    matchLabels:
+      app: glsb-service
+  strategy:
+    dnsTtlSeconds: 1
+    splitBrainThresholdSeconds: 30
+    type: roundRobin
+    # weight:
+    #   cl-1: 10
+    #   cl-2: 90

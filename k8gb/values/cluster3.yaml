@@ -1,0 +1,11 @@
+k8gb:
+  clusterGeoTag: "cluster3" # -- geo tag for this cluster
+  extGslbClustersGeoTags: "cluster1,cluster2"
+  edgeDNSZone: "nig.gl" # main zone which would contain gslb zone to delegate
+  dnsZone: "k8gb.nig.gl" # -- main zone which would contain gslb zone to delegate
+  edgeDNSServers:
+    - "1.1.1.1"
+cloudflare:
+  enabled: true
+  zoneID: f060f7c7823de0e410ee01ba55a0e30a
+  dnsRecordsPerPage: 5000

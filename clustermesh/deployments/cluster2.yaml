@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: meshed-service
+spec:
+  selector:
+    matchLabels:
+      app: meshed-service
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: meshed-service
+    spec:
+      containers:
+      - name: test
+        image: ghcr.io/nicolaiort/kusatoko:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+          - name: PORT
+            value: "80"
+          - name: ROOT_MESSAGE
+            value: "Hello from cluster-2"
