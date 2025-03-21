@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: meshed-service
+  name: echo-service
 spec:
   selector:
     matchLabels:
-      app: meshed-service
+      app: echo-service
   replicas: 2
   template:
     metadata:
       labels:
-        app: meshed-service
+        app: echo-service
     spec:
       containers:
       - name: test
@@ -22,4 +22,12 @@ spec:
           - name: PORT
             value: "80"
           - name: ROOT_MESSAGE
-            value: "Hello from cluster-1"
+            value: "Hello from aws"
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
