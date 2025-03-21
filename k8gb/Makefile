@@ -40,7 +40,7 @@ k8gb-setup-single:
 	helm repo add k8gb https://www.k8gb.io
 	KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl create namespace k8gb --dry-run=client -o yaml | KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl apply -f -
 	KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl apply -f .secrets/cloudflaretoken.yaml
-	KUBECONFIG=$(CURRENT_KUBECONFIG) helm upgrade --install k8gb k8gb/k8gb --namespace k8gb -f $(CURRENT_VALUES)
+	KUBECONFIG=$(CURRENT_KUBECONFIG) helm upgrade --install k8gb k8gb/k8gb --namespace k8gb --version 0.14.0 -f $(CURRENT_VALUES)
 
 k8gb-roundrobin:
 	@echo "Deploying k8gb roundrobin demo..."
