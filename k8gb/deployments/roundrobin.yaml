@@ -54,3 +54,7 @@ spec:
     dnsTtlSeconds: 1
     splitBrainThresholdSeconds: 30
     type: roundRobin
+    weight:
+      cluster1: 33
+      cluster2: 33
+      cluster3: 33
