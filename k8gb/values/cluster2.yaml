@@ -11,3 +11,6 @@ cloudflare:
   dnsRecordsPerPage: 5000
 coredns:
   serviceType: LoadBalancer
+  service:
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-type: nlb
