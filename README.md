@@ -13,6 +13,9 @@ This repository contains two main demos:
 
 ## Try it for yourself
 
+Please note that this repo contains secrets encrypted with [git-crypt](https://github.com/AGWA/git-crypt), they are only used for the live-demo and are not needed to run the demo yourself.
+You can just override the secrets with your own values.
+
 ### Prerequisites
 
 - Three Kubernetes clusters (we used [clusters managed by KKP](https://kubermatic.com/products/kubermatic-kubernetes-platform/)) with:
