@@ -13,7 +13,7 @@ setup:
 setup-baseline:
 	make setup-baseline-single CURRENT_KUBECONFIG=$(KUBECONFIG1)
 	make setup-baseline-single CURRENT_KUBECONFIG=$(KUBECONFIG2)
-	# make setup-baseline-single CURRENT_KUBECONFIG=$(KUBECONFIG3)
+	make setup-baseline-single CURRENT_KUBECONFIG=$(KUBECONFIG3)
 
 setup-baseline-single:
 	KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl create namespace nginx --dry-run=client -o yaml | KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl apply -f -
@@ -24,7 +24,7 @@ setup-baseline-single:
 setup-echo:
 	KUBECONFIG=$(KUBECONFIG1) kubectl apply -f deployments/cluster1.yaml
 	KUBECONFIG=$(KUBECONFIG2) kubectl apply -f deployments/cluster2.yaml
-	# KUBECONFIG=$(KUBECONFIG3) kubectl apply -f deployments/cluster3.yaml
+	KUBECONFIG=$(KUBECONFIG3) kubectl apply -f deployments/cluster3.yaml
 #endregion Setup
 
 #region k8gb
@@ -33,7 +33,7 @@ k8gb-setup:
 	@echo "Setting up k8gb..."
 	make k8gb-setup-single CURRENT_KUBECONFIG=$(KUBECONFIG1) CURRENT_VALUES=k8gb/values/cluster1.yaml
 	make k8gb-setup-single CURRENT_KUBECONFIG=$(KUBECONFIG2) CURRENT_VALUES=k8gb/values/cluster2.yaml
-	# make k8gb-setup-single CURRENT_KUBECONFIG=$(KUBECONFIG3) CURRENT_VALUES=k8gb/values/cluster3.yaml
+	make k8gb-setup-single CURRENT_KUBECONFIG=$(KUBECONFIG3) CURRENT_VALUES=k8gb/values/cluster3.yaml
 	@echo "k8gb setup complete."
 
 k8gb-setup-single:
@@ -55,7 +55,7 @@ k8gb-failover:
 k8gb-deployments:
 	KUBECONFIG=$(KUBECONFIG1) kubectl apply -f $(CURRENT_DEPLOYMENT)
 	KUBECONFIG=$(KUBECONFIG2) kubectl apply -f $(CURRENT_DEPLOYMENT)
-	# KUBECONFIG=$(KUBECONFIG3) kubectl apply -f $(CURRENT_DEPLOYMENT)
+	KUBECONFIG=$(KUBECONFIG3) kubectl apply -f $(CURRENT_DEPLOYMENT)
 
 #endregion k8gb
 
