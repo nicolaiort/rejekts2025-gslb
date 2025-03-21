@@ -10,7 +10,7 @@ TODO:
 
 ### Prerequisites
 
-- At least three Kubernetes clusters (we used [clusters managed by KKP](https://kubermatic.com/products/kubermatic-kubernetes-platform/)) with:
+- Three Kubernetes clusters (we used [clusters managed by KKP](https://kubermatic.com/products/kubermatic-kubernetes-platform/)) with:
   - LoadBalancers that are reachable from each other and your local machine
 - A public domain name hosted on a DNS provider that supports [external-dns](https://github.com/kubernetes-sigs/external-dns) (we used Cloudflare)
 - Kubectl installed on your local machine
