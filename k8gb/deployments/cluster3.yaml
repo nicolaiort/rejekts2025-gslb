@@ -22,7 +22,7 @@ spec:
           - name: PORT
             value: "80"
           - name: ROOT_MESSAGE
-            value: "Hello from datev"
+            value: "Hello from the other side"
         livenessProbe:
           httpGet:
             path: /healthz
