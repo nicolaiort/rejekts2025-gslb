@@ -52,6 +52,11 @@ k8gb-failover:
 	make k8gb-deployments CURRENT_KUBECONFIG=$(KUBECONFIG1) CURRENT_DEPLOYMENT=configs/primary-1.yaml
 	@echo "k8gb deployments complete."
 
+k8gb-failover3:
+	@echo "Deploying k8gb failover demo..."
+	make k8gb-deployments CURRENT_KUBECONFIG=$(KUBECONFIG1) CURRENT_DEPLOYMENT=configs/primary-3.yaml
+	@echo "k8gb deployments complete."
+
 k8gb-deployments:
 	KUBECONFIG=$(KUBECONFIG1) kubectl apply -f $(CURRENT_DEPLOYMENT)
 	KUBECONFIG=$(KUBECONFIG2) kubectl apply -f $(CURRENT_DEPLOYMENT)
