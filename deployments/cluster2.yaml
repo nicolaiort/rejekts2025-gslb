@@ -22,7 +22,7 @@ spec:
           - name: PORT
             value: "80"
           - name: ROOT_MESSAGE
-            value: "Hello from azure"
+            value: "Hello from kubevirt"
         livenessProbe:
           httpGet:
             path: /healthz
