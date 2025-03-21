@@ -41,22 +41,28 @@ You can just override the secrets with your own values.
    cd rejekts2025-glsb
    ```
 
-3. Get your kubeconfigs for the clusters you want to use and place them in the `.secrets` directory.
+### K8GB Demo
+
+1. Switch to the `k8gb` directory:
+
+   ```bash
+   cd k8gb
+   ```
+
+2. Get your kubeconfigs for the clusters you want to use and place them in the `.secrets` directory.
    The files should be named `cluster1-kubeconfig`, `cluster2-kubeconfig`, etc.
 
-4. Create secrets, create namespaces and install nginx with cert-manager into your clusters:
+3. Create secrets, create namespaces and install nginx with cert-manager into your clusters:
 
    ```bash
    make setup
    ```
 
-### K8GB Demo
+4. Setup k8gb in your clusters:
 
-Setup k8gb in all clusters:
-
-```bash
-make k8gb-setup
-```
+   ```bash
+   make k8gb-setup
+   ```
 
 #### Round Robin
 
