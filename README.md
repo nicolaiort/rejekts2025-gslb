@@ -78,6 +78,8 @@ You can just override the secrets with your own values.
 
    ```bash
    make repeat TIMES=10 COMMAND="make curl-resolved DOMAIN=demo.k8gb.nig.gl"
+   # or to just get the counts
+   make dig-chart TIMES=100 DOMAIN="demo.k8gb.nig.gl"
    ```
 
    It should round-robin between the clusters.

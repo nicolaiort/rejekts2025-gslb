@@ -69,8 +69,17 @@ k8gb-deployments:
 dig:
 	@dig $(DOMAIN) +short
 
+dig-first:
+	@dig $(DOMAIN) +short @13.39.231.96 | head -1
+
+dig-chart:
+	@for i in {1..$(TIMES)}; do make dig-first DOMAIN=$(DOMAIN); done | sort | uniq -c | sort -nr
+
 curl-resolved:
-	@curl -s -k -H "Host: $(DOMAIN)" -H "Connection: close" https://$(shell dig $(DOMAIN) +short @18.198.114.75 | head -1 ) && echo
+	@curl -s -k -H "Host: $(DOMAIN)" -H "Connection: close" https://$(shell dig $(DOMAIN) +short @3.77.50.165 | head -1 ) && echo
+
+curl-resolved-chart:
+	@@for i in {1..$(TIMES)}; do make curl-resolved DOMAIN=$(DOMAIN); done | sort | uniq -c | sort -nr
 
 repeat:
 	@for i in {1..$(TIMES)}; do printf \-;printf " "; $(COMMAND); done
