@@ -19,6 +19,7 @@ setup-baseline-single:
 	KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl create namespace nginx --dry-run=client -o yaml | KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl apply -f -
 	KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl create namespace cert-manager --dry-run=client -o yaml | KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl apply -f -
 	KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl apply -k baseline/tools
+	KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl wait --for=condition=available --timeout=180s deployment/cert-manager-webhook -n cert-manager
 	KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl apply -f baseline/configs
 
 setup-echo:
@@ -52,6 +53,11 @@ k8gb-failover:
 	make k8gb-deployments CURRENT_KUBECONFIG=$(KUBECONFIG1) CURRENT_DEPLOYMENT=configs/primary-1.yaml
 	@echo "k8gb deployments complete."
 
+k8gb-failover2:
+	@echo "Deploying k8gb failover demo..."
+	make k8gb-deployments CURRENT_KUBECONFIG=$(KUBECONFIG1) CURRENT_DEPLOYMENT=configs/primary-2.yaml
+	@echo "k8gb deployments complete."
+
 k8gb-failover3:
 	@echo "Deploying k8gb failover demo..."
 	make k8gb-deployments CURRENT_KUBECONFIG=$(KUBECONFIG1) CURRENT_DEPLOYMENT=configs/primary-3.yaml
@@ -79,7 +85,7 @@ curl-resolved:
 	@curl -s -k -H "Host: $(DOMAIN)" -H "Connection: close" https://$(shell dig $(DOMAIN) +short @3.77.50.165 | head -1 ) && echo
 
 curl-resolved-chart:
-	@@for i in {1..$(TIMES)}; do make curl-resolved DOMAIN=$(DOMAIN); done | sort | uniq -c | sort -nr
+	@for i in {1..$(TIMES)}; do make curl-resolved DOMAIN=$(DOMAIN); done | sort | uniq -c | sort -nr
 
 repeat:
 	@for i in {1..$(TIMES)}; do printf \-;printf " "; $(COMMAND); done
