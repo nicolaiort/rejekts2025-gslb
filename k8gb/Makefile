@@ -82,7 +82,7 @@ dig-chart:
 	@for i in {1..$(TIMES)}; do make dig-first DOMAIN=$(DOMAIN); done | sort | uniq -c | sort -nr
 
 curl-resolved:
-	@curl -s -k -H "Host: $(DOMAIN)" -H "Connection: close" http://$(shell dig $(DOMAIN) +short @3.77.50.165 | head -1 ) && echo
+	@curl -s -k -H "Host: $(DOMAIN)" -H "Connection: close" http://$(shell dig $(DOMAIN) +short @13.39.231.96 | head -1 ) && echo
 
 curl-resolved-chart:
 	@for i in {1..$(TIMES)}; do make curl-resolved DOMAIN=$(DOMAIN); done | sort | uniq -c | sort -nr
