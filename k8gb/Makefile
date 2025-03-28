@@ -4,6 +4,8 @@ KUBECONFIG1 := .secrets/cluster1-kubeconfig
 KUBECONFIG2 := .secrets/cluster2-kubeconfig
 KUBECONFIG3 := .secrets/cluster3-kubeconfig
 
+DOMAIN := "demo.k8gb.nig.gl"
+
 #region Setup
 
 setup:
@@ -73,7 +75,10 @@ k8gb-deployments:
 #region Helpers
 
 dig:
-	@dig $(DOMAIN) +short
+	@dig $(DOMAIN) +short @13.39.231.96
+
+watch-dig:
+	@watch make dig DOMAIN=$(DOMAIN)
 
 dig-first:
 	@dig $(DOMAIN) +short @13.39.231.96 | head -1
@@ -83,6 +88,9 @@ dig-chart:
 
 curl-resolved:
 	@curl -s -k -H "Host: $(DOMAIN)" -H "Connection: close" http://$(shell dig $(DOMAIN) +short @13.39.231.96 | head -1 ) && echo
+
+watch-curl-resolved:
+	@watch make curl-resolved DOMAIN=$(DOMAIN)
 
 curl-resolved-chart:
 	@for i in {1..$(TIMES)}; do make curl-resolved DOMAIN=$(DOMAIN); done | sort | uniq -c | sort -nr
@@ -95,6 +103,9 @@ infinity:
 
 oha:
 	docker run -it ghcr.io/nicolaiort/oha:latest -n 10000 http://$(DOMAIN)
+
+watch-pods:
+	@watch kubectl --kubeconfig=$(CURRENT_KUBECONFIG) get pods -n default
 
 #region Kubernetes
 stop-service:
