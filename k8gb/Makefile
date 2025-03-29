@@ -114,5 +114,12 @@ stop-service:
 start-service:
 	KUBECONFIG=$(KUBECONFIG$(CLUSTERID)) kubectl scale deployment echo-service --replicas=2
 
+watch-nodes:
+	@watch kubectl --kubeconfig=$(CURRENT_KUBECONFIG) get nodes
+
+kill-workers:
+	KUBECONFIG=$(KUBECONFIG$(CLUSTERID)) kubectl scale machinedeployment -n kube-system thirsty-tesla --replicas=0
+	KUBECONFIG=$(KUBECONFIG$(CLUSTERID)) kubectl get nodes -o name | xargs -I {} kubectl delete {}
+
 #endregion Kubernetes
 #endregion Helpers
