@@ -23,7 +23,7 @@ spec:
           - name: PORT
             value: "80"
           - name: ROOT_MESSAGE
-            value: "Hello from gcp"
+            value: "Hello from aws"
         livenessProbe:
           httpGet:
             path: /healthz

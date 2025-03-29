@@ -58,7 +58,7 @@ spec:
           - name: PORT
             value: "80"
           - name: ROOT_MESSAGE
-            value: "Hello from vsphere@kubermatic"
+            value: "Hello from kubermatic"
         livenessProbe:
           httpGet:
             path: /healthz
