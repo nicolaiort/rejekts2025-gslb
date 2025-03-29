@@ -39,11 +39,21 @@ k8gb-setup:
 	make k8gb-setup-single CURRENT_KUBECONFIG=$(KUBECONFIG3) CURRENT_VALUES=values/cluster3.yaml
 	@echo "k8gb setup complete."
 
+
+
+
+
+
+
 k8gb-setup-single:
 	helm repo add k8gb https://www.k8gb.io
 	KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl create namespace k8gb --dry-run=client -o yaml | KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl apply -f -
 	KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl apply -f .secrets/cloudflaretoken.yaml
 	KUBECONFIG=$(CURRENT_KUBECONFIG) helm upgrade --install k8gb k8gb/k8gb --namespace k8gb --version 0.14.0 -f $(CURRENT_VALUES)
+
+
+
+
 
 k8gb-roundrobin:
 	@echo "Deploying k8gb roundrobin demo..."
@@ -69,6 +79,11 @@ k8gb-deployments:
 	KUBECONFIG=$(KUBECONFIG1) kubectl apply -f $(CURRENT_DEPLOYMENT)
 	KUBECONFIG=$(KUBECONFIG2) kubectl apply -f $(CURRENT_DEPLOYMENT)
 	KUBECONFIG=$(KUBECONFIG3) kubectl apply -f $(CURRENT_DEPLOYMENT)
+
+k8gb-teardown:
+	KUBECONFIG=$(KUBECONFIG1) kubectl delete -f configs/roundrobin.yaml
+	KUBECONFIG=$(KUBECONFIG2) kubectl delete -f configs/roundrobin.yaml
+	KUBECONFIG=$(KUBECONFIG3) kubectl delete -f configs/roundrobin.yaml
 
 #endregion k8gb
 
@@ -119,7 +134,7 @@ watch-nodes:
 
 kill-workers:
 	KUBECONFIG=$(KUBECONFIG$(CLUSTERID)) kubectl scale machinedeployment -n kube-system thirsty-tesla --replicas=0
-	KUBECONFIG=$(KUBECONFIG$(CLUSTERID)) kubectl get nodes -o name | xargs -I {} kubectl delete {}
+	KUBECONFIG=$(KUBECONFIG$(CLUSTERID)) kubectl delete node -l beta.kubernetes.io/instance-type=t3.small --force --grace-period=0
 
 #endregion Kubernetes
 #endregion Helpers
