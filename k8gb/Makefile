@@ -75,19 +75,19 @@ k8gb-deployments:
 #region Helpers
 
 dig:
-	@dig $(DOMAIN) +short @13.39.231.96
+	@dig $(DOMAIN) +short @3.66.102.21
 
 watch-dig:
 	@watch make dig DOMAIN=$(DOMAIN)
 
 dig-first:
-	@dig $(DOMAIN) +short @13.39.231.96 | head -1
+	@dig $(DOMAIN) +short @3.66.102.21 | head -1
 
 dig-chart:
 	@for i in {1..$(TIMES)}; do make dig-first DOMAIN=$(DOMAIN); done | sort | uniq -c | sort -nr
 
 curl-resolved:
-	@curl -s -k -H "Host: $(DOMAIN)" -H "Connection: close" http://$(shell dig $(DOMAIN) +short @13.39.231.96 | head -1 ) && echo
+	@curl -s -k -H "Host: $(DOMAIN)" -H "Connection: close" http://$(shell dig $(DOMAIN) +short @3.66.102.21 | head -1 ) && echo
 
 watch-curl-resolved:
 	@watch make curl-resolved DOMAIN=$(DOMAIN)
