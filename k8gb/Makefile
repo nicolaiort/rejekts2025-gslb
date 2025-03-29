@@ -115,4 +115,9 @@ start-service:
 	KUBECONFIG=$(KUBECONFIG$(CLUSTERID)) kubectl scale deployment echo-service --replicas=2
 
 #endregion Kubernetes
+
+#region helm
+helm-download:
+	helm pull --untar -d ./.charts k8gb/k8gb --version 0.14.0
+
 #endregion Helpers

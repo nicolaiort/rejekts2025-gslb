@@ -11,6 +11,7 @@ spec:
     create: true
     name: external-dns
   reconciliationInterval: 0s
+  # https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/cloudflare.md
   # https://github.com/kubernetes-sigs/external-dns/blob/master/charts/external-dns/values.yaml
   valuesBlock: |-
     provider:
@@ -23,4 +24,4 @@ spec:
         valueFrom:
           secretKeyRef:
             name: cloudflare
-            key: apiKey
+            key: token

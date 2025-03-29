@@ -15,6 +15,14 @@ setup-baseline:
 	#make setup-baseline-single CURRENT_KUBECONFIG=$(KUBECONFIG2)
 	#make setup-baseline-single CURRENT_KUBECONFIG=$(KUBECONFIG3)
 
+setup-cilium-step-2:
+	@echo -- Cluster 1 -------- CILIUM clustermesh server ---------
+	KUBECONFIG=$(KUBECONFIG1) kubectl get svc clustermesh-apiserver -n kube-system
+	@echo -- Cluster 1 -------- CILIUM CA -------------------------
+	KUBECONFIG=$(KUBECONFIG1) kubectl get secret cilium-ca -n kube-system -o yaml
+	@echo -- Cluster 1 -------- CILIUM API server remote cert ----
+	KUBECONFIG=$(KUBECONFIG1) kubectl get secret clustermesh-apiserver-remote-cert -n kube-system -o yaml
+
 setup-baseline-single:
 	KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl apply -f baseline/
 	KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl apply -f .secrets/baseline/
@@ -24,49 +32,6 @@ setup-echo:
 	KUBECONFIG=$(KUBECONFIG2) kubectl apply -f deployments/cluster2.yaml
 	KUBECONFIG=$(KUBECONFIG3) kubectl apply -f deployments/cluster3.yaml
 #endregion Setup
-
-#region k8gb
-
-k8gb-setup:
-	@echo "Setting up k8gb..."
-	make k8gb-setup-single CURRENT_KUBECONFIG=$(KUBECONFIG1) CURRENT_VALUES=values/cluster1.yaml
-	make k8gb-setup-single CURRENT_KUBECONFIG=$(KUBECONFIG2) CURRENT_VALUES=values/cluster2.yaml
-	make k8gb-setup-single CURRENT_KUBECONFIG=$(KUBECONFIG3) CURRENT_VALUES=values/cluster3.yaml
-	@echo "k8gb setup complete."
-
-k8gb-setup-single:
-	helm repo add k8gb https://www.k8gb.io
-	KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl create namespace k8gb --dry-run=client -o yaml | KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl apply -f -
-	KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl apply -f .secrets/cloudflaretoken.yaml
-	KUBECONFIG=$(CURRENT_KUBECONFIG) helm upgrade --install k8gb k8gb/k8gb --namespace k8gb --version 0.14.0 -f $(CURRENT_VALUES)
-
-k8gb-roundrobin:
-	@echo "Deploying k8gb roundrobin demo..."
-	make k8gb-deployments CURRENT_KUBECONFIG=$(KUBECONFIG1) CURRENT_DEPLOYMENT=configs/roundrobin.yaml
-	@echo "k8gb deployments complete."
-
-k8gb-failover:
-	@echo "Deploying k8gb failover demo..."
-	make k8gb-deployments CURRENT_KUBECONFIG=$(KUBECONFIG1) CURRENT_DEPLOYMENT=configs/primary-1.yaml
-	@echo "k8gb deployments complete."
-
-k8gb-failover3:
-	@echo "Deploying k8gb failover demo..."
-	make k8gb-deployments CURRENT_KUBECONFIG=$(KUBECONFIG1) CURRENT_DEPLOYMENT=configs/primary-3.yaml
-	@echo "k8gb deployments complete."
-
-k8gb-deployments:
-	KUBECONFIG=$(KUBECONFIG1) kubectl apply -f $(CURRENT_DEPLOYMENT)
-	KUBECONFIG=$(KUBECONFIG2) kubectl apply -f $(CURRENT_DEPLOYMENT)
-	KUBECONFIG=$(KUBECONFIG3) kubectl apply -f $(CURRENT_DEPLOYMENT)
-
-deploy-k8c-dc:
-	KUBECONFIG=$(CURRENT_KUBECONFIG) CURRENT_VALUES=values/cluster-dc.yaml make k8gb-setup-single
-	KUBECONFIG=$(CURRENT_KUBECONFIG) make setup-baseline-single
-	KUBECONFIG=$(KUBECONFIG2) kubectl apply -f deployments/cluster-dc.yaml
-	KUBECONFIG=$(KUBECONFIG2) kubectl apply -f configs/primary-dc.yaml
-
-#endregion k8gb
 
 #region Helpers
 
@@ -91,3 +56,9 @@ start-service:
 
 #endregion Kubernetes
 #endregion Helpers
+helm-download:
+	helm repo add cilium https://helm.cilium.io/
+	helm repo update
+	helm pull --untar -d ./.charts/new cilium/cilium --version 1.16.6
+	helm pull --untar -d ./.charts/old cilium/cilium --version 1.14.9
+
