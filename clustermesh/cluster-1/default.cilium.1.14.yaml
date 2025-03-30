@@ -24,26 +24,6 @@ spec:
       podSecurityContext:
         seccompProfile:
           type: RuntimeDefault
-    #####mod
-    cluster:
-      id: 1
-      name: cluster-1
-    clustermesh:
-      apiserver:
-        kvstoremesh:
-          enabled: false
-        service:
-          type: LoadBalancer
-          annotations:
-            service.beta.kubernetes.io/aws-load-balancer-internal: "true"
-            service.beta.kubernetes.io/aws-load-balancer-type: nlb
-        tls:
-          auto:
-            method: cronJob
-      config:
-        enabled: true
-      useAPIServer: true
-    #####-mod
     cni:
       exclusive: false
     envoy:
@@ -72,7 +52,7 @@ spec:
       operator:
         clusterPoolIPv4MaskSize: 24
         clusterPoolIPv4PodCIDRList:
-        - 172.25.0.0/16
+        - 172.25.0.0/16 #IMPORTANT NEEDS TO BE DIFFERENT AS IN CLUSTER 2
     ##### k8sServiceHost: ___TODO__REPLACE__WITH_K8S_API_HOST
     k8sServiceHost: klvllx6l85.shared-seed.latest.snapshots.k8c.io
     k8sServicePort: 6443
