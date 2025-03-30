@@ -36,8 +36,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: glsb-service
-  name: glsb-service
+    app: gslb-service
+  name: gslb-service
 spec:
   type: ClusterIP
   ports:
@@ -50,9 +50,9 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: glsb-service
+  name: gslb-service
   labels:
-    app: glsb-service
+    app: gslb-service
 spec:
   ingressClassName: nginx
   rules:
@@ -63,6 +63,6 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: glsb-service
+              name: gslb-service
               port:
                 number: 80

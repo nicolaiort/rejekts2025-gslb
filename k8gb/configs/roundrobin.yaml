@@ -2,13 +2,13 @@
 apiVersion: k8gb.absa.oss/v1beta1
 kind: Gslb
 metadata:
-  name: glsb-service
+  name: gslb-service
 spec:
   resourceRef:
     apiVersion: networking.k8s.io/v1
     kind: Ingress
     matchLabels:
-      app: glsb-service
+      app: gslb-service
   strategy:
     dnsTtlSeconds: 1
     splitBrainThresholdSeconds: 30

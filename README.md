@@ -1,4 +1,4 @@
-# rejekts2025-glsb
+# rejekts2025-gslb
 
 Demo for the talk "Evaluating Global Load Balancing Options for Kubernetes in Practice" presented at [Cloud Native Rejekts 2025](https://cfp.cloud-native.rejekts.io/cloud-native-rejekts-europe-london-2025/talk/UFZNVH/) in London by [Nicolai Ort](https://github.com/nicolaiort) and [Tobias Schneck](https://github.com/toschneck).
 
