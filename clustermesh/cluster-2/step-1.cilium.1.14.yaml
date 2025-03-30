@@ -1,0 +1,106 @@
+apiVersion: apps.kubermatic.k8c.io/v1
+kind: ApplicationInstallation
+metadata:
+  labels:
+    apps.kubermatic.k8c.io/managed-by: kkp
+    apps.kubermatic.k8c.io/type: cni
+  name: cilium
+  namespace: kube-system
+spec:
+  applicationRef:
+    name: cilium
+    version: 1.14.16
+  deployOptions:
+    helm:
+      atomic: true
+      timeout: 10m0s
+      wait: true
+  namespace:
+    create: false
+    name: kube-system
+  reconciliationInterval: 0h10m0s
+  valuesBlock: |
+    certgen:
+      podSecurityContext:
+        seccompProfile:
+          type: RuntimeDefault
+    ##### mod - Mesh Setup
+    cluster:
+      id: 2
+      name: cluster-2
+    clustermesh:
+      apiserver:
+        service:
+          type: LoadBalancer
+          annotations:
+            service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+            service.beta.kubernetes.io/aws-load-balancer-type: nlb
+        tls:
+          auto:
+            method: cronJob
+          ca:
+            # ca.crt from the cilium-ca secret in Cluster 1
+            cert: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUNFekNDQWJxZ0F3SUJBZ0lVYXd1OUJXNG9LQnlBZlpCblZpRXFCRk0rMHE0d0NnWUlLb1pJemowRUF3SXcKYURFTE1Ba0dBMVVFQmhNQ1ZWTXhGakFVQmdOVkJBZ1REVk5oYmlCR2NtRnVZMmx6WTI4eEN6QUpCZ05WQkFjVApBa05CTVE4d0RRWURWUVFLRXdaRGFXeHBkVzB4RHpBTkJnTlZCQXNUQmtOcGJHbDFiVEVTTUJBR0ExVUVBeE1KClEybHNhWFZ0SUVOQk1CNFhEVEkxTURNek1ERXhNREl3TUZvWERUSTRNRE15T1RFeE1ESXdNRm93YURFTE1Ba0cKQTFVRUJoTUNWVk14RmpBVUJnTlZCQWdURFZOaGJpQkdjbUZ1WTJselkyOHhDekFKQmdOVkJBY1RBa05CTVE4dwpEUVlEVlFRS0V3WkRhV3hwZFcweER6QU5CZ05WQkFzVEJrTnBiR2wxYlRFU01CQUdBMVVFQXhNSlEybHNhWFZ0CklFTkJNRmt3RXdZSEtvWkl6ajBDQVFZSUtvWkl6ajBEQVFjRFFnQUVWWEw4SXV1ZlIvZjNZSXp3NDBGOGpDcmUKdisrWEQ2ZmF4RVhrOEcvekRjVG0xeWRNMGRhMUx0ZE1uSU55RndMckR6MXh0NGI3cUVNRGpOdEordkNxbTZOQwpNRUF3RGdZRFZSMFBBUUgvQkFRREFnRUdNQThHQTFVZEV3RUIvd1FGTUFNQkFmOHdIUVlEVlIwT0JCWUVGQ0ptCkNKYTlPNkpEVld5Qm9VOVZKTmpubjFzZU1Bb0dDQ3FHU000OUJBTUNBMGNBTUVRQ0lDVEZDaDJyaXorRnZTVmsKdVhoT0xhbm9MM2FmUXM5Z1JsYXRmanFBUWdlSkFpQVI5VnJXWnpPVk80SzAvTmJTTERMTGwxVnppbEZKdU9jSQpqbmJnKzhDNjF3PT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+            # ca.key from the cilium-ca secret in Cluster 1
+            key: LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0tCk1IY0NBUUVFSUFKL3hOeUhEMjVOQ0FFSzFLMTlKZ2hodmZWRXZ3SXBmbzM3bWNtOERlWjZvQW9HQ0NxR1NNNDkKQXdFSG9VUURRZ0FFVlhMOEl1dWZSL2YzWUl6dzQwRjhqQ3JldisrWEQ2ZmF4RVhrOEcvekRjVG0xeWRNMGRhMQpMdGRNbklOeUZ3THJEejF4dDRiN3FFTURqTnRKK3ZDcW13PT0KLS0tLS1FTkQgRUMgUFJJVkFURSBLRVktLS0tLQo=
+      config:
+        enabled: true
+        clusters:
+        - name: cluster-1
+          address: ""
+          port: 2379
+          ips:
+          # external-ip of the clustermesh-apiserver svc in Cluster 1
+          # ATTENTION host names doesn't work, needs to be IP!
+          - 10.0.80.102
+          tls:
+            # tls.crt from clustermesh-apiserver-remote-cert secret in Cluster 1
+            cert: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUIrakNDQWFDZ0F3SUJBZ0lVU3NySFhlbWRuOW5VQ1Y2T295RzZqeUlaa3lFd0NnWUlLb1pJemowRUF3SXcKYURFTE1Ba0dBMVVFQmhNQ1ZWTXhGakFVQmdOVkJBZ1REVk5oYmlCR2NtRnVZMmx6WTI4eEN6QUpCZ05WQkFjVApBa05CTVE4d0RRWURWUVFLRXdaRGFXeHBkVzB4RHpBTkJnTlZCQXNUQmtOcGJHbDFiVEVTTUJBR0ExVUVBeE1KClEybHNhWFZ0SUVOQk1CNFhEVEkxTURNek1ERXlNRFF3TUZvWERUSTRNRE15T1RFeU1EUXdNRm93RVRFUE1BMEcKQTFVRUF4TUdjbVZ0YjNSbE1Ga3dFd1lIS29aSXpqMENBUVlJS29aSXpqMERBUWNEUWdBRXFob3FBbVIzV1BZbQpmUER1SVRyNTUrbTJnMHBjeXp1THZia0R0c080UmV1SjE5czJKRFdIU0dFVTRpa2lRWnNuU3dqMFRrUnFPR256CmNtcDNBY1FmOEtOL01IMHdEZ1lEVlIwUEFRSC9CQVFEQWdXZ01CMEdBMVVkSlFRV01CUUdDQ3NHQVFVRkJ3TUIKQmdnckJnRUZCUWNEQWpBTUJnTlZIUk1CQWY4RUFqQUFNQjBHQTFVZERnUVdCQlM3SkwvZFJiK3h3bXBnWVlqOQovaTZMKzV4NzVqQWZCZ05WSFNNRUdEQVdnQlFpWmdpV3ZUdWlRMVZzZ2FGUFZTVFk1NTliSGpBS0JnZ3Foa2pPClBRUURBZ05JQURCRkFpQnM5V2FnMmQyUUFWNm1JcWpkeC9KMXAwQTI5alZnR3Jya2ZwUWpjODJialFJaEFPTTAKYys0d3EraW83UmRBRWFPOHk0SmRDOVFsMzltTjcxdk9hWjFyRjV0eAotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+            # tls.key from clustermesh-apiserver-remote-cert secret in Cluster 1
+            key: LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0tCk1IY0NBUUVFSUg0OHNsbW9QQ0xZVDA0ejB0Mlh4bmJoYlp1NEt4V1cxN3hJbnVPV281dUxvQW9HQ0NxR1NNNDkKQXdFSG9VUURRZ0FFcWhvcUFtUjNXUFltZlBEdUlUcjU1K20yZzBwY3l6dUx2YmtEdHNPNFJldUoxOXMySkRXSApTR0VVNGlraVFac25Td2owVGtScU9HbnpjbXAzQWNRZjhBPT0KLS0tLS1FTkQgRUMgUFJJVkFURSBLRVktLS0tLQo=
+      useAPIServer: true
+    ##### mod
+    cni:
+      exclusive: false
+    envoy:
+      enabled: false
+      podSecurityContext:
+        seccompProfile:
+          type: RuntimeDefault
+    hubble:
+      relay:
+        enabled: true
+        podSecurityContext:
+          seccompProfile:
+            type: RuntimeDefault
+      tls:
+        auto:
+          method: cronJob
+      ui:
+        backend: {}
+        enabled: true
+        frontend: {}
+        securityContext:
+          enabled: true
+          seccompProfile:
+            type: RuntimeDefault
+    ipam:
+      operator:
+        clusterPoolIPv4MaskSize: 24
+        clusterPoolIPv4PodCIDRList:
+        - 172.26.0.0/16 #IMPORTANT NEEDS TO BE DIFFERENT AS IN CLUSTER 1
+    ##### k8sServiceHost: ___CLUSTER_2___ #TODO__REPLACE__WITH_K8S_API_HOST
+    k8sServiceHost: ev44cjnqmc.shared-seed.latest.snapshots.k8c.io
+    k8sServicePort: 6443
+    kubeProxyReplacement: "true"
+    operator:
+      podSecurityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      replicas: 1
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+    podSecurityContext:
+      seccompProfile:
+        type: RuntimeDefault

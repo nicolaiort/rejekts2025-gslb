@@ -1,0 +1,86 @@
+apiVersion: kubermatic.k8c.io/v1
+clusterLabels:
+  is-credential-preset: "true"
+  project-id: x2mlbqsr7s
+credential: credential-aws-ijrngtcbwb
+kind: ClusterTemplate
+metadata:
+  annotations:
+    kubermatic.io/initial-machinedeployment-request: '{"metadata":{"name":"aws","namespace":"kube-system","creationTimestamp":null,"annotations":{"k8c.io/operating-system-profile":"osp-flatcar"},"finalizers":["foregroundDeletion"]},"spec":{"replicas":2,"selector":{"matchLabels":{"machine":"md-ijrngtcbwb-cr8g7fh9v7"}},"template":{"metadata":{"creationTimestamp":null,"labels":{"machine":"md-ijrngtcbwb-cr8g7fh9v7"}},"spec":{"metadata":{"creationTimestamp":null,"labels":{"system/cluster":"ijrngtcbwb"}},"providerSpec":{"value":{"sshPublicKeys":[],"caPublicKey":"","cloudProvider":"aws","cloudProviderSpec":{"accessKeyId":"","secretAccessKey":"","assumeRoleARN":"","assumeRoleExternalID":"","region":"eu-central-1","availabilityZone":"eu-central-1b","vpcId":"vpc-01c49dc069e4b0131","subnetId":"subnet-0541a13d0cb8870d7","securityGroupIDs":[""],"instanceProfile":"","instanceType":"t3a.large","ami":"","diskSize":25,"diskType":"gp3","ebsVolumeEncrypted":false,"tags":{"kubernetes.io/cluster/ijrngtcbwb":"","kubernetes.io/cluster/pt99wrbgjz":"","kubernetes.io/cluster/rm6tsxxqdv":"","system/cluster":"ijrngtcbwb"},"assignPublicIP":true,"isSpotInstance":false,"spotInstanceConfig":{"maxPrice":"","persistentRequest":null,"interruptionBehavior":""}},"operatingSystem":"flatcar","operatingSystemSpec":{"disableAutoUpdate":true,"disableLocksmithD":true,"disableUpdateEngine":false,"provisioningUtility":"ignition"},"network":{"cidr":"","gateway":"","dns":{"servers":null},"ipFamily":"IPv4"}}},"versions":{"kubelet":""}}}},"status":{}}'
+    presetName: area-presales
+    user: tobias.schneck@kubermatic.com
+  labels:
+    is-credential-preset: "true"
+    name: rejekts-aws-1
+    project-id: x2mlbqsr7s
+    scope: project
+  name: ijrngtcbwb
+spec:
+  cloud:
+    aws:
+      credentialsReference:
+        name: credential-aws-ijrngtcbwb
+        namespace: kubermatic
+      instanceProfileName: ""
+      roleARN: ""
+      routeTableID: ""
+      # demo-cilium-service-mesh https://eu-central-1.console.aws.amazon.com/ec2/home?region=eu-central-1#SecurityGroup:groupId=sg-0796dc5d7c809e3d2
+      # enabled: TCP 4240 (HTTP health checks) / UDP 8472 (VXLAN
+      securityGroupID: sg-0796dc5d7c809e3d2
+      vpcID: vpc-01c49dc069e4b0131
+    dc: aws-eu-central-1a
+    providerName: aws
+  clusterNetwork:
+    dnsDomain: cluster.local
+    ipFamily: IPv4
+    ipvs:
+      strictArp: true
+    konnectivityEnabled: true
+    nodeCidrMaskSizeIPv4: 24
+    nodeLocalDNSCacheEnabled: true
+    pods:
+      cidrBlocks:
+      - 172.25.0.0/16
+    proxyMode: ebpf
+    services:
+      cidrBlocks:
+      - 10.240.16.0/20
+    tunnelingAgentIP: 100.64.30.10
+  cniPlugin:
+    type: cilium
+    version: 1.14.16
+  componentsOverride:
+    apiserver:
+      nodePortRange: 30000-32767
+      replicas: 2
+    controllerManager:
+      replicas: 1
+    etcd:
+      clusterSize: 3
+      diskSize: 5Gi
+    konnectivityProxy:
+      resources:
+        limits:
+          cpu: "1"
+    scheduler:
+      replicas: 1
+  containerRuntime: containerd
+  enableUserSSHKeyAgent: true
+  exposeStrategy: Tunneling
+  humanReadableName: rejekts-aws-1
+  kubelb:
+    enableGatewayAPI: false
+    enabled: false
+    useLoadBalancerClass: false
+  kubernetesDashboard:
+    enabled: true
+  mla:
+    loggingEnabled: true
+    monitoringEnabled: true
+  opaIntegration:
+    webhookTimeoutSeconds: 10
+  pause: false
+  version: 1.30.9
+userSSHKeys:
+- id: key-vx889xl49v
+  name: tobi@loodse.com

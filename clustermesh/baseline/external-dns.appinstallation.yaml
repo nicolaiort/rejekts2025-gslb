@@ -1,0 +1,27 @@
+apiVersion: apps.kubermatic.k8c.io/v1
+kind: ApplicationInstallation
+metadata:
+  name: external-dns
+  namespace: base
+spec:
+  applicationRef:
+    name: external-dns
+    version: 1.15.0
+  namespace:
+    create: true
+    name: external-dns
+  reconciliationInterval: 0s
+  # https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/cloudflare.md
+  # https://github.com/kubernetes-sigs/external-dns/blob/master/charts/external-dns/values.yaml
+  valuesBlock: |-
+    provider:
+      name: cloudflare
+    txtOwnerId: tobi
+    domainFilters:
+      - tobi.demo.k8gb.nig.gl
+    env:
+      - name: CF_API_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: cloudflare
+            key: token

@@ -1,0 +1,69 @@
+apiVersion: apps.kubermatic.k8c.io/v1
+kind: ApplicationInstallation
+metadata:
+  labels:
+    apps.kubermatic.k8c.io/managed-by: kkp
+    apps.kubermatic.k8c.io/type: cni
+  name: cilium
+  namespace: kube-system
+spec:
+  applicationRef:
+    name: cilium
+    version: 1.14.6
+  deployOptions:
+    helm:
+      atomic: true
+      timeout: 10m0s
+      wait: true
+  namespace:
+    create: false
+    name: kube-system
+  reconciliationInterval: 1h0m0s
+  valuesBlock: |
+    certgen:
+      podSecurityContext:
+        seccompProfile:
+          type: RuntimeDefault
+    cni:
+      exclusive: false
+    envoy:
+      enabled: false
+      podSecurityContext:
+        seccompProfile:
+          type: RuntimeDefault
+    hubble:
+      relay:
+        enabled: true
+        podSecurityContext:
+          seccompProfile:
+            type: RuntimeDefault
+      tls:
+        auto:
+          method: cronJob
+      ui:
+        backend: {}
+        enabled: true
+        frontend: {}
+        securityContext:
+          enabled: true
+          seccompProfile:
+            type: RuntimeDefault
+    ipam:
+      operator:
+        clusterPoolIPv4MaskSize: 24
+        clusterPoolIPv4PodCIDRList:
+        - 172.25.0.0/16
+    k8sServiceHost: __CLUSTER_ID__.shared-seed.latest.snapshots.k8c.io
+    k8sServicePort: 6443
+    kubeProxyReplacement: "true"
+    operator:
+      podSecurityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      replicas: 1
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+    podSecurityContext:
+      seccompProfile:
+        type: RuntimeDefault

@@ -1,0 +1,19 @@
+apiVersion: apps.kubermatic.k8c.io/v1
+kind: ApplicationInstallation
+metadata:
+  name: nginx
+  namespace: base
+spec:
+  applicationRef:
+    name: nginx
+    version: 1.12.0
+  namespace:
+    create: true
+    name: nginx
+  reconciliationInterval: 0s
+  valuesBlock: |
+    controller:
+      replicaCount: 3
+      service:
+        annotations:
+          service.beta.kubernetes.io/aws-load-balancer-type: "nlb"

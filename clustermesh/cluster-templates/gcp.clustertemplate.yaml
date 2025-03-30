@@ -1,0 +1,82 @@
+apiVersion: kubermatic.k8c.io/v1
+clusterLabels:
+  is-credential-preset: "true"
+  project-id: x2mlbqsr7s
+credential: credential-gcp-vwthzdttbk
+kind: ClusterTemplate
+metadata:
+  annotations:
+    kubermatic.io/initial-application-installations-request: '[{"name":"nginx","creationTimestamp":"0001-01-01T00:00:00Z","spec":{"namespace":{"name":"nginx","create":true},"applicationRef":{"name":"nginx","version":"1.12.0"}}}]'
+    kubermatic.io/initial-machinedeployment-request: '{"metadata":{"name":"rejekts-uk","namespace":"kube-system","creationTimestamp":null,"annotations":{"k8c.io/operating-system-profile":"osp-flatcar"},"finalizers":["foregroundDeletion"]},"spec":{"replicas":2,"selector":{"matchLabels":{"machine":"md-vwthzdttbk-vl6vczhzm9"}},"template":{"metadata":{"creationTimestamp":null,"labels":{"machine":"md-vwthzdttbk-vl6vczhzm9"}},"spec":{"metadata":{"creationTimestamp":null,"labels":{"system/cluster":"vwthzdttbk"}},"providerSpec":{"value":{"sshPublicKeys":[],"caPublicKey":"","cloudProvider":"gce","cloudProviderSpec":{"serviceAccount":"","zone":"europe-west2-b","machineType":"n1-standard-2","diskSize":25,"diskType":"pd-standard","network":"","subnetwork":"","preemptible":false,"tags":["kubernetes-cluster-vwthzdttbk","system-cluster-vwthzdttbk"],"assignPublicIPAddress":true,"multizone":false,"regional":false,"customImage":"","disableMachineServiceAccount":null,"enableNestedVirtualization":null,"minCPUPlatform":"","projectID":""},"operatingSystem":"flatcar","operatingSystemSpec":{"disableAutoUpdate":true,"disableLocksmithD":true,"disableUpdateEngine":false,"provisioningUtility":"ignition"},"network":{"cidr":"","gateway":"","dns":{"servers":null},"ipFamily":"IPv4"}}},"versions":{"kubelet":""}}}},"status":{}}'
+    presetName: area-presales
+    user: tobias.schneck@kubermatic.com
+  labels:
+    is-credential-preset: "true"
+    name: rejekts-gcp-uk
+    project-id: x2mlbqsr7s
+    scope: project
+  name: vwthzdttbk
+spec:
+  cloud:
+    dc: gcp-westeurope-2
+    gcp:
+      credentialsReference:
+        name: credential-gcp-vwthzdttbk
+        namespace: kubermatic
+      network: ""
+      subnetwork: ""
+    providerName: gcp
+  clusterNetwork:
+    dnsDomain: cluster.local
+    ipFamily: IPv4
+    ipvs:
+      strictArp: true
+    konnectivityEnabled: true
+    nodeCidrMaskSizeIPv4: 24
+    nodeLocalDNSCacheEnabled: true
+    pods:
+      cidrBlocks:
+      - 172.25.0.0/16
+    proxyMode: ebpf
+    services:
+      cidrBlocks:
+      - 10.240.16.0/20
+    tunnelingAgentIP: 100.64.30.10
+  cniPlugin:
+    type: cilium
+    version: 1.14.16
+  componentsOverride:
+    apiserver:
+      nodePortRange: 30000-32767
+      replicas: 2
+    controllerManager:
+      replicas: 1
+    etcd:
+      clusterSize: 3
+      diskSize: 5Gi
+    konnectivityProxy:
+      resources:
+        limits:
+          cpu: "1"
+    scheduler:
+      replicas: 1
+  containerRuntime: containerd
+  enableUserSSHKeyAgent: true
+  exposeStrategy: Tunneling
+  humanReadableName: rejekts-gcp-uk
+  kubelb:
+    enableGatewayAPI: false
+    enabled: false
+    useLoadBalancerClass: false
+  kubernetesDashboard:
+    enabled: true
+  mla:
+    loggingEnabled: true
+    monitoringEnabled: true
+  opaIntegration:
+    webhookTimeoutSeconds: 10
+  pause: false
+  version: 1.30.9
+userSSHKeys:
+- id: key-vx889xl49v
+  name: tobi@loodse.com
