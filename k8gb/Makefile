@@ -60,7 +60,9 @@ k8gb-roundrobin:
 	make k8gb-deployments CURRENT_KUBECONFIG=$(KUBECONFIG1) CURRENT_DEPLOYMENT=configs/roundrobin.yaml
 	@echo "k8gb deployments complete."
 
-k8gb-failover:
+k8gb-failover: k8gb-failover1
+
+k8gb-failover1:
 	@echo "Deploying k8gb failover demo..."
 	make k8gb-deployments CURRENT_KUBECONFIG=$(KUBECONFIG1) CURRENT_DEPLOYMENT=configs/primary-1.yaml
 	@echo "k8gb deployments complete."
@@ -90,19 +92,19 @@ k8gb-teardown:
 #region Helpers
 
 dig:
-	@dig $(DOMAIN) +short @3.66.102.21
+	@dig $(DOMAIN) +short @34.105.166.131
 
 watch-dig:
 	@watch make dig DOMAIN=$(DOMAIN)
 
 dig-first:
-	@dig $(DOMAIN) +short @3.66.102.21 | head -1
+	@dig $(DOMAIN) +short @34.105.166.131 | head -1
 
 dig-chart:
 	@for i in {1..$(TIMES)}; do make dig-first DOMAIN=$(DOMAIN); done | sort | uniq -c | sort -nr
 
 curl-resolved:
-	@curl -s -k -H "Host: $(DOMAIN)" -H "Connection: close" http://$(shell dig $(DOMAIN) +short @3.66.102.21 | head -1 ) && echo
+	@curl -s -k -H "Host: $(DOMAIN)" -H "Connection: close" http://$(shell dig $(DOMAIN) +short @34.105.166.131 | head -1 ) && echo
 
 watch-curl-resolved:
 	@watch make curl-resolved DOMAIN=$(DOMAIN)
