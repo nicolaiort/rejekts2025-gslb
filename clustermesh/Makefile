@@ -15,18 +15,62 @@ setup-baseline:
 	#make setup-baseline-single CURRENT_KUBECONFIG=$(KUBECONFIG2)
 	#make setup-baseline-single CURRENT_KUBECONFIG=$(KUBECONFIG3)
 
-setup-cilium-step-2:
-	@echo -- Cluster 1 -------- CILIUM clustermesh server ---------
-	KUBECONFIG=$(KUBECONFIG1) kubectl get svc clustermesh-apiserver -n kube-system
-	@echo -- Cluster 1 -------- CILIUM CA -------------------------
-	KUBECONFIG=$(KUBECONFIG1) kubectl get secret cilium-ca -n kube-system -o yaml
-	@echo -- Cluster 1 -------- CILIUM API server remote cert ----
-	KUBECONFIG=$(KUBECONFIG1) kubectl get secret clustermesh-apiserver-remote-cert -n kube-system -o yaml
-
 setup-baseline-single:
 	KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl apply -f baseline/
 	KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl apply -f .secrets/baseline/
 
+############# SERVICE MESH SETUP
+## Cluster 1
+cilium-cluster-1-default:
+	KUBECONFIG=$(KUBECONFIG1) kubectl apply -f cluster-1/default.cilium.1.14.yaml
+cilium-cluster-1-step-1:
+	KUBECONFIG=$(KUBECONFIG1) kubectl apply -f cluster-1/step-1.cilium.1.14.yaml
+cilium-cluster-1-step-2:
+	KUBECONFIG=$(KUBECONFIG1) kubectl apply -f cluster-1/step-2.cilium.1.14.yaml
+
+cilium-cluster-1-step-2-config-info:
+	@echo '>>>  please execute AFTER cluster 2 setup  <<<'
+	@echo
+	@echo -- Cluster 1 -------- CILIUM CA -------------------------
+	KUBECONFIG=$(KUBECONFIG1) kubectl get secret cilium-ca -n kube-system -o yaml
+	@echo -- Cluster 2 -------- CILIUM API server remote cert ----
+	KUBECONFIG=$(KUBECONFIG2) kubectl get secret clustermesh-apiserver-remote-cert -n kube-system -o yaml
+	@echo -- Cluster 2 -------- CILIUM clustermesh server ---------
+	KUBECONFIG=$(KUBECONFIG2) kubectl get svc clustermesh-apiserver -n kube-system
+	@echo ---------------------------------------------------------
+	@echo '>>>> COPY VALUES to: cluster-1/step-2.cilium.1.14.yaml'
+	@echo
+
+cilium-cluster-1-health:
+	@echo '>>>  CLUSTER 1  <<<'
+	KUBECONFIG=$(KUBECONFIG1) kubectl exec -it -n kube-system ds/cilium -- cilium-health status
+
+## Cluster 2
+
+cilium-cluster-2-default:
+	KUBECONFIG=$(KUBECONFIG2) kubectl apply -f cluster-2/default.cilium.1.14.yaml
+cilium-cluster-2-step-1:
+	KUBECONFIG=$(KUBECONFIG2) kubectl apply -f cluster-2/step-1.cilium.1.14.yaml
+
+cilium-cluster-2-config-info:
+	@echo '>>>  please execute AFTER cluster 1 setup STEP 1  <<<'
+	@echo
+	@echo -- Cluster 1 -------- CILIUM CA -------------------------
+	KUBECONFIG=$(KUBECONFIG1) kubectl get secret cilium-ca -n kube-system -o yaml
+	@echo -- Cluster 1 -------- CILIUM API server remote cert ----
+	KUBECONFIG=$(KUBECONFIG1) kubectl get secret clustermesh-apiserver-remote-cert -n kube-system -o yaml
+	@echo -- Cluster 1 -------- CILIUM clustermesh server ---------
+	KUBECONFIG=$(KUBECONFIG1) kubectl get svc clustermesh-apiserver -n kube-system
+	@echo ---------------------------------------------------------
+	@echo '>>>> COPY VALUES to: cluster-2/step-1.cilium.1.14.yaml'
+	@echo 
+
+cilium-cluster-2-health:
+	@echo '>>>  CLUSTER 2  <<<'
+	KUBECONFIG=$(KUBECONFIG2) kubectl exec -it -n kube-system ds/cilium -- cilium-health status
+
+
+############## SETUP APP
 setup-echo:
 	KUBECONFIG=$(KUBECONFIG1) kubectl apply -f deployments/cluster1.yaml
 	KUBECONFIG=$(KUBECONFIG2) kubectl apply -f deployments/cluster2.yaml

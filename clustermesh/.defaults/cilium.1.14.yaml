@@ -9,7 +9,7 @@ metadata:
 spec:
   applicationRef:
     name: cilium
-    version: 1.14.16
+    version: 1.14.6
   deployOptions:
     helm:
       atomic: true
@@ -52,9 +52,8 @@ spec:
       operator:
         clusterPoolIPv4MaskSize: 24
         clusterPoolIPv4PodCIDRList:
-        - 172.26.0.0/16 #IMPORTANT NEEDS TO BE DIFFERENT AS IN CLUSTER 1
-    ##### k8sServiceHost: ___TODO__REPLACE__WITH_K8S_API_HOST
-    k8sServiceHost: ev44cjnqmc.shared-seed.latest.snapshots.k8c.io
+        - 172.25.0.0/16
+    k8sServiceHost: __CLUSTER_ID__.shared-seed.latest.snapshots.k8c.io
     k8sServicePort: 6443
     kubeProxyReplacement: "true"
     operator:
