@@ -39,11 +39,21 @@ k8gb-setup:
 	make k8gb-setup-single CURRENT_KUBECONFIG=$(KUBECONFIG3) CURRENT_VALUES=values/cluster3.yaml
 	@echo "k8gb setup complete."
 
+
+
+
+
+
+
 k8gb-setup-single:
 	helm repo add k8gb https://www.k8gb.io
 	KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl create namespace k8gb --dry-run=client -o yaml | KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl apply -f -
 	KUBECONFIG=$(CURRENT_KUBECONFIG) kubectl apply -f .secrets/cloudflaretoken.yaml
 	KUBECONFIG=$(CURRENT_KUBECONFIG) helm upgrade --install k8gb k8gb/k8gb --namespace k8gb --version 0.14.0 -f $(CURRENT_VALUES)
+
+
+
+
 
 k8gb-roundrobin:
 	@echo "Deploying k8gb roundrobin demo..."
@@ -70,24 +80,29 @@ k8gb-deployments:
 	KUBECONFIG=$(KUBECONFIG2) kubectl apply -f $(CURRENT_DEPLOYMENT)
 	KUBECONFIG=$(KUBECONFIG3) kubectl apply -f $(CURRENT_DEPLOYMENT)
 
+k8gb-teardown:
+	KUBECONFIG=$(KUBECONFIG1) kubectl delete -f configs/roundrobin.yaml
+	KUBECONFIG=$(KUBECONFIG2) kubectl delete -f configs/roundrobin.yaml
+	KUBECONFIG=$(KUBECONFIG3) kubectl delete -f configs/roundrobin.yaml
+
 #endregion k8gb
 
 #region Helpers
 
 dig:
-	@dig $(DOMAIN) +short @13.39.231.96
+	@dig $(DOMAIN) +short @3.66.102.21
 
 watch-dig:
 	@watch make dig DOMAIN=$(DOMAIN)
 
 dig-first:
-	@dig $(DOMAIN) +short @13.39.231.96 | head -1
+	@dig $(DOMAIN) +short @3.66.102.21 | head -1
 
 dig-chart:
 	@for i in {1..$(TIMES)}; do make dig-first DOMAIN=$(DOMAIN); done | sort | uniq -c | sort -nr
 
 curl-resolved:
-	@curl -s -k -H "Host: $(DOMAIN)" -H "Connection: close" http://$(shell dig $(DOMAIN) +short @13.39.231.96 | head -1 ) && echo
+	@curl -s -k -H "Host: $(DOMAIN)" -H "Connection: close" http://$(shell dig $(DOMAIN) +short @3.66.102.21 | head -1 ) && echo
 
 watch-curl-resolved:
 	@watch make curl-resolved DOMAIN=$(DOMAIN)
@@ -113,6 +128,13 @@ stop-service:
 
 start-service:
 	KUBECONFIG=$(KUBECONFIG$(CLUSTERID)) kubectl scale deployment echo-service --replicas=2
+
+watch-nodes:
+	@watch kubectl --kubeconfig=$(CURRENT_KUBECONFIG) get nodes
+
+kill-workers:
+	KUBECONFIG=$(KUBECONFIG$(CLUSTERID)) kubectl scale machinedeployment -n kube-system thirsty-tesla --replicas=0
+	KUBECONFIG=$(KUBECONFIG$(CLUSTERID)) kubectl delete node -l beta.kubernetes.io/instance-type=t3.small --force --grace-period=0
 
 #endregion Kubernetes
 
