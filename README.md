@@ -11,6 +11,8 @@ This repository contains two main demos:
   - Failover based load balancing across multiple clusters with one primary cluster and multiple secondary clusters
 2. **clustermesh**: A demo of clustermesh based load balancing implemented with [cilium](https://cilium.io/)
 
+We also included the drawings we used in the talk to explain the concepts of global load balancing in the `images` directory. The `.excalidraw.svg` files are editable with [Excalidraw](https://excalidraw.com/).
+
 ## Try it for yourself
 
 Please note that this repo contains secrets encrypted with [git-crypt](https://github.com/AGWA/git-crypt), they are only used for the live-demo and are not needed to run the demo yourself.
@@ -76,6 +78,8 @@ You can just override the secrets with your own values.
 
    ```bash
    make repeat TIMES=10 COMMAND="make curl-resolved DOMAIN=demo.k8gb.nig.gl"
+   # or to just get the counts
+   make dig-chart TIMES=100 DOMAIN="demo.k8gb.nig.gl"
    ```
 
    It should round-robin between the clusters.
