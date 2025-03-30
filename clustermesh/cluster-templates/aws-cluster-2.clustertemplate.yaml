@@ -2,24 +2,25 @@ apiVersion: kubermatic.k8c.io/v1
 clusterLabels:
   is-credential-preset: "true"
   project-id: x2mlbqsr7s
-credential: credential-aws-ijrngtcbwb
+credential: credential-aws-ildjx5qskg
 kind: ClusterTemplate
 metadata:
   annotations:
-    kubermatic.io/initial-machinedeployment-request: '{"metadata":{"name":"aws","namespace":"kube-system","creationTimestamp":null,"annotations":{"k8c.io/operating-system-profile":"osp-flatcar"},"finalizers":["foregroundDeletion"]},"spec":{"replicas":2,"selector":{"matchLabels":{"machine":"md-ijrngtcbwb-cr8g7fh9v7"}},"template":{"metadata":{"creationTimestamp":null,"labels":{"machine":"md-ijrngtcbwb-cr8g7fh9v7"}},"spec":{"metadata":{"creationTimestamp":null,"labels":{"system/cluster":"ijrngtcbwb"}},"providerSpec":{"value":{"sshPublicKeys":[],"caPublicKey":"","cloudProvider":"aws","cloudProviderSpec":{"accessKeyId":"","secretAccessKey":"","assumeRoleARN":"","assumeRoleExternalID":"","region":"eu-central-1","availabilityZone":"eu-central-1b","vpcId":"vpc-01c49dc069e4b0131","subnetId":"subnet-0541a13d0cb8870d7","securityGroupIDs":[""],"instanceProfile":"","instanceType":"t3a.large","ami":"","diskSize":25,"diskType":"gp3","ebsVolumeEncrypted":false,"tags":{"kubernetes.io/cluster/ijrngtcbwb":"","kubernetes.io/cluster/pt99wrbgjz":"","kubernetes.io/cluster/rm6tsxxqdv":"","system/cluster":"ijrngtcbwb"},"assignPublicIP":true,"isSpotInstance":false,"spotInstanceConfig":{"maxPrice":"","persistentRequest":null,"interruptionBehavior":""}},"operatingSystem":"flatcar","operatingSystemSpec":{"disableAutoUpdate":true,"disableLocksmithD":true,"disableUpdateEngine":false,"provisioningUtility":"ignition"},"network":{"cidr":"","gateway":"","dns":{"servers":null},"ipFamily":"IPv4"}}},"versions":{"kubelet":""}}}},"status":{}}'
+    kubermatic.io/initial-application-installations-request: '[]'
+    kubermatic.io/initial-machinedeployment-request: '{"metadata":{"name":"cluster-2","namespace":"kube-system","creationTimestamp":null,"annotations":{"k8c.io/operating-system-profile":"osp-flatcar"},"finalizers":["foregroundDeletion"]},"spec":{"replicas":2,"selector":{"matchLabels":{"machine":"md-ildjx5qskg-4fc7l44m4p"}},"template":{"metadata":{"creationTimestamp":null,"labels":{"machine":"md-ildjx5qskg-4fc7l44m4p"}},"spec":{"metadata":{"creationTimestamp":null,"labels":{"system/cluster":"ildjx5qskg"}},"providerSpec":{"value":{"sshPublicKeys":[],"caPublicKey":"","cloudProvider":"aws","cloudProviderSpec":{"accessKeyId":"","secretAccessKey":"","assumeRoleARN":"","assumeRoleExternalID":"","region":"eu-central-1","availabilityZone":"eu-central-1b","vpcId":"vpc-01c49dc069e4b0131","subnetId":"subnet-0541a13d0cb8870d7","securityGroupIDs":[""],"instanceProfile":"","instanceType":"t3a.large","ami":"","diskSize":25,"diskType":"gp3","ebsVolumeEncrypted":false,"tags":{"kubernetes.io/cluster/ijrngtcbwb":"","kubernetes.io/cluster/ildjx5qskg":"","kubernetes.io/cluster/pt99wrbgjz":"","kubernetes.io/cluster/rm6tsxxqdv":"","system/cluster":"ildjx5qskg"},"assignPublicIP":true,"isSpotInstance":false,"spotInstanceConfig":{"maxPrice":"","persistentRequest":null,"interruptionBehavior":""}},"operatingSystem":"flatcar","operatingSystemSpec":{"disableAutoUpdate":true,"disableLocksmithD":true,"disableUpdateEngine":false,"provisioningUtility":"ignition"},"network":{"cidr":"","gateway":"","dns":{"servers":null},"ipFamily":"IPv4"}}},"versions":{"kubelet":""}}}},"status":{}}'
     presetName: area-presales
     user: tobias.schneck@kubermatic.com
   labels:
     is-credential-preset: "true"
-    name: rejekts-aws-1
+    name: rejekts-aws-2
     project-id: x2mlbqsr7s
     scope: project
-  name: ijrngtcbwb
+  name: ildjx5qskg
 spec:
   cloud:
     aws:
       credentialsReference:
-        name: credential-aws-ijrngtcbwb
+        name: credential-aws-ildjx5qskg
         namespace: kubermatic
       instanceProfileName: ""
       roleARN: ""
@@ -40,7 +41,7 @@ spec:
     nodeLocalDNSCacheEnabled: true
     pods:
       cidrBlocks:
-      - 172.25.0.0/16
+      - 172.26.0.0/16 #TODO NOTE: MOST BY DIFFERENT AS IN CLUSTER 1
     proxyMode: ebpf
     services:
       cidrBlocks:
@@ -67,7 +68,7 @@ spec:
   containerRuntime: containerd
   enableUserSSHKeyAgent: true
   exposeStrategy: Tunneling
-  humanReadableName: rejekts-aws-1
+  humanReadableName: rejekts-aws-2
   kubelb:
     enableGatewayAPI: false
     enabled: false
