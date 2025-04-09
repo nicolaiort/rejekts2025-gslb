@@ -8,7 +8,6 @@ Cloud Native Rejekts](https://www.youtube.com/watch?v=RBMRU8rtxfI)
 [Slides - Evaluating Global Load Balancing Options for Kubernetes in Practice](https://www.slideshare.net/slideshow/evaluating-global-load-balancing-options-for-kubernetes-in-practice-kubermatic-datev/277640385)
 [![slides-p0](./images/slides-p0.png)](https://www.slideshare.net/slideshow/evaluating-global-load-balancing-options-for-kubernetes-in-practice-kubermatic-datev/277640385)
 
-
 ## Overview
 
 This repository contains two main demos:
@@ -60,15 +59,16 @@ You can just override the secrets with your own values.
    ```
 
 2. Get your kubeconfigs for the clusters you want to use and place them in the `.secrets` directory.
-   The files should be named `cluster1-kubeconfig`, `cluster2-kubeconfig`, etc.
 
-3. Create secrets, create namespaces and install nginx with cert-manager into your clusters:
+3. Replace `demo.k8gb.nig.gl` with your own domain in the makefile, deployments and k8gb-values
+
+4. Create secrets, create namespaces and install nginx with cert-manager into your clusters:
 
    ```bash
    make setup
    ```
 
-4. Setup k8gb in your clusters:
+5. Setup k8gb in your clusters:
 
    ```bash
    make k8gb-setup
@@ -85,7 +85,7 @@ You can just override the secrets with your own values.
 2. Observe the responses of the demo service:
 
    ```bash
-   make repeat TIMES=10 COMMAND="make curl-resolved DOMAIN=demo.k8gb.nig.gl"
+   make repeat TIMES=10 COMMAND="make curl-resolved"
    # or to just get the counts
    make dig-chart TIMES=100 DOMAIN="demo.k8gb.nig.gl"
    ```
@@ -101,7 +101,7 @@ You can just override the secrets with your own values.
 4. Observe the responses of the demo service:
 
    ```bash
-   make repeat TIMES=10 COMMAND="make curl-resolved DOMAIN=demo.k8gb.nig.gl"
+   make repeat TIMES=10 COMMAND="make curl-resolved"
    ```
 
    It should round-robin between the clusters excluding the one we took down.
@@ -115,23 +115,23 @@ You can just override the secrets with your own values.
 6. Observe the responses of the demo service:
 
    ```bash
-   make repeat TIMES=10 COMMAND="make curl-resolved DOMAIN=demo.k8gb.nig.gl"
+   make repeat TIMES=10 COMMAND="make curl-resolved"
    ```
 
    It should round-robin between all clusters again.
 
 #### Failover
 
-1. Set your demo service to failover:
+1. Set your demo service to failover with primary cluster 1:
 
    ```bash
-   make k8gb-failover
+   make k8gb-failover1
    ```
 
 2. Observe the responses of the demo service:
 
    ```bash
-   make repeat TIMES=10 COMMAND="make curl-resolved DOMAIN=demo.k8gb.nig.gl"
+   make repeat TIMES=10 COMMAND="make curl-resolved"
    ```
 
    It should always respond from the primary cluster.
@@ -145,7 +145,7 @@ You can just override the secrets with your own values.
 4. Observe the responses of the demo service:
 
    ```bash
-   make repeat TIMES=10 COMMAND="make curl-resolved DOMAIN=demo.k8gb.nig.gl"
+   make repeat TIMES=10 COMMAND="make curl-resolved"
    ```
 
    It should now round-robin between the remaining clusters.
@@ -159,7 +159,7 @@ You can just override the secrets with your own values.
 6. Observe the responses of the demo service:
 
    ```bash
-   make repeat TIMES=10 COMMAND="make curl-resolved DOMAIN=demo.k8gb.nig.gl"
+   make repeat TIMES=10 COMMAND="make curl-resolved"
    ```
 
    It should always respond from the primary cluster.
