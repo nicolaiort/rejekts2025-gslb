@@ -2,8 +2,8 @@
 
 Demo for the talk "Evaluating Global Load Balancing Options for Kubernetes in Practice" presented at [Cloud Native Rejekts 2025](https://cfp.cloud-native.rejekts.io/cloud-native-rejekts-europe-london-2025/talk/UFZNVH/) in London by [Nicolai Ort](https://github.com/nicolaiort) and [Tobias Schneck](https://github.com/toschneck).
 
-[📽️ Talk Recording @YouTube: 
-Cloud Native Rejekts](https://www.youtube.com/watch?v=RBMRU8rtxfI)
+[📽️ Talk Recording @YouTube: Cloud Native Rejekts](https://www.youtube.com/watch?v=RBMRU8rtxfI)
+[🎥 Just the screen recording showing failover and roundrobin](https://drive.google.com/file/d/1umNZZbI7y81hugdeKF9ovOoawYm1vbiE/view?usp=sharing)
 
 [Slides - Evaluating Global Load Balancing Options for Kubernetes in Practice](https://www.slideshare.net/slideshow/evaluating-global-load-balancing-options-for-kubernetes-in-practice-kubermatic-datev/277640385)
 [![slides-p0](./images/slides-p0.png)](https://www.slideshare.net/slideshow/evaluating-global-load-balancing-options-for-kubernetes-in-practice-kubermatic-datev/277640385)
